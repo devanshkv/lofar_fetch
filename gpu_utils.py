@@ -222,7 +222,7 @@ def gpu_dedisp_and_dmt_crop(cand, device=0):
             cuda.atomic.add(cand_data_out, (kk, int(jj / time_decimation_factor)),
                             cand_data_in[ii, (jj + all_delays[ii, kk]) % cand_data_in.shape[1]])
 
-    threadsperblock_3d = (4, 8, 32)
+    threadsperblock_3d = (1, 32, 32)
     blockspergrid_x = math.ceil(cand_data_in.shape[0] / threadsperblock_3d[0])
     blockspergrid_y = math.ceil(cand_data_in.shape[1] / threadsperblock_3d[1])
     blockspergrid_z = math.ceil(dm_list.shape[0] / threadsperblock_3d[2])
