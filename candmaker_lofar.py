@@ -134,10 +134,8 @@ def cand2h5(cand_val):
     cand.tend = copy_header.tend
     cand.nspectra = copy_header.nspectra
     cand.tstart -= cand.dispersion_delay() #+ (cand.width*cand.tsamp)//2
-    cand = _get_chunk(cand, offset = (block_id-1)*copy_header.nspectra)
+    cand = _get_chunk(cand, offset = (block_id)*copy_header.nspectra)
     cand=gpu_dedisp_and_dmt_crop(cand)
-    print(cand.dedispersed.shape)
-    print(cand.dmt.shape)
 
     if cand.dedispersed.shape != (256,256):
         cand.dedispersed=resize(cand.dedispersed, (256,256))
@@ -216,7 +214,7 @@ if __name__ == '__main__':
     else:
         logging.basicConfig(level=logging.INFO, format=logging_format)
 
-    cand_pars = pd.read_csv(values.cand_param_file,
+    cand_pars = pd.read_csv(values.cand_param_file,header=None,
                             names=['fil_file', 'snr', 'stime', 'dm', 'width',  'MJD_file', 'block_id', 'label', 'kill_mask_path'])
     process_list = []
     for index, row in cand_pars.iterrows():
