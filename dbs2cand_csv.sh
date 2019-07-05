@@ -13,5 +13,5 @@ do
 	block_id=$(echo $cand | cut -d , -f 9)
 	in_name=$(echo $1 | cut -d . -f 1 | cut -d_ -f 3 )
 	fil_name=$(ls -1 *${in_name}*fil)
-	echo "$fil_name,$snr,$stime,$dm,$width,$MJD_file,$block_id,,,"
+	echo "$fil_name,$snr,$stime,$dm,$width,$MJD_file,$block_id"
 done< <(cat $1 | tail -n +2)
