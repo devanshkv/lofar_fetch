@@ -18,7 +18,7 @@ if __name__ == "__main__":
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-v', '--verbose', help='Be verbose', action='store_true')
     parser.add_argument('-t', '--tdist', type=int, help='Sample distance (in number of samples)', default=16)
-    parser.add_argument('-d', '--ddist', type=int, help='DM distance (in pc/cc)', default=1)
+    parser.add_argument('-d', '--ddist', type=float, help='DM distance (in pc/cc)', default=1)
     parser.add_argument('-p', '--plot', action='store_true', help='Show plots', default=False)
     parser.add_argument('-w', '--log_width', type=int, help='Log width distance', default=1)
     parser.add_argument('-m', '--minsamp', type=int,
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     for line in content:
         line = line.split()
         if "#" in line and "Written" in line:
-            buffer_id = int(line[3])
+            buffer_id = int(line[3].strip(':'))
             MJD = float(line[6])
             list_of_buffers.append(temp_list)
             MJD_list.append(MJD)
@@ -68,7 +68,7 @@ if __name__ == "__main__":
         df['tcand'] = (df['Time'] - df['MJD_file']) * 24 * 3600
         df['log_width'] = np.log2(df['Width'])
 
-        data = np.array((df['tcand'] * TSAMP, df['DM'] / dm_step, df['log_width'] / width_step),
+        data = np.array((df['tcand'] / TSAMP / time_step, df['DM'] / dm_step, df['log_width'] / width_step),
                         dtype=np.float32).T
 
         db = DBSCAN(eps=np.sqrt(3), min_samples=min_samples, n_jobs=n_jobs).fit(data)
@@ -104,6 +104,7 @@ if __name__ == "__main__":
             plt.ylabel('DM (pc/cc)')
             plt.title(f'Block ID: {block_id}, No. of clusters: {len(unique_labels)} ')
             plt.savefig(f'{block_id}.png', bbox_inches='tight')
+            plt.close()
 
         logging.info(f'Block id: {block_id} Reduced from {len(df)} to {len(unique_labels)} candidates')
 
