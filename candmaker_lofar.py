@@ -81,7 +81,7 @@ def _fil_name_to_hdr(fil_name, tstart_MJD):
     fil_file.za_start = 0
     fil_file.data_type = 32
     fil_file.fch1 = 148.9 #MHz
-    fil_file.foff = -0.003305176 #Mhz
+    fil_file.foff = -0.00305176 #Mhz
     if beam_number % 2 == 0:
         fil_file.nchans = 1920
     else:
